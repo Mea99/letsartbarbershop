@@ -446,6 +446,15 @@ h2.title em { font-family: var(--font-script); font-style: normal; color: var(--
   .review { flex-basis: 88%; }
 }
 
+/* ---------- Dostępność / SEO ---------- */
+/* Tekst tylko dla czytników ekranu i wyszukiwarek (h1 przy logo-obrazku). */
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+/* h1 opakowuje logo bez wpływu na układ hero. */
+.hero-h1 { display: contents; }
+
 /* ---------- Lightbox (powiększanie zdjęć galerii) ---------- */
 .gallery-grid img { cursor: zoom-in; transition: transform .35s var(--ease), filter .35s var(--ease); }
 .gallery-grid img:hover { transform: scale(1.03); filter: brightness(1.05); }
