@@ -1,0 +1,13 @@
+# image-slot persistence sidecar — runtime/editor only, never publish
+.image-slots.state.json
+
+# Claude Code local settings — nigdy do repo
+.claude/
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.log
+
+# dependencies (profilaktycznie — strona jest statyczna, ale gdyby kiedyś doszły)
+node_modules/
