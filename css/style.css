@@ -234,9 +234,11 @@ h2.title em { font-family: var(--font-script); font-style: normal; color: var(--
   }
   .glow, .grain, .ember, .btn-primary::after,
   .hero-logo, .hero-tag, .rating, .hero-cta, .scrollcue,
-  .scrollcue .mouse::after, .badge-open .pulse, .marquee-track {
+  .scrollcue .mouse::after, .badge-open .pulse {
     animation: none !important;
   }
+  /* Pasek FADE/BRODA… ma jeżdżić także przy „Ogranicz ruch" (iOS Reduce Motion). */
+  .marquee-track { animation: marquee 26s linear infinite !important; }
 }
 
 /* ---------------------------------------------------------------
@@ -443,4 +445,42 @@ h2.title em { font-family: var(--font-script); font-style: normal; color: var(--
 @media (max-width: 380px) {
   :root { --pad: 16px; }
   .review { flex-basis: 88%; }
+}
+
+/* ---------- Lightbox (powiększanie zdjęć galerii) ---------- */
+.gallery-grid img { cursor: zoom-in; transition: transform .35s var(--ease), filter .35s var(--ease); }
+.gallery-grid img:hover { transform: scale(1.03); filter: brightness(1.05); }
+.lightbox {
+  position: fixed; inset: 0; z-index: 200; display: none;
+  align-items: center; justify-content: center;
+  background: rgba(8,6,4,.94); backdrop-filter: blur(6px);
+  padding: 24px; box-sizing: border-box; animation: lbIn .2s var(--ease);
+}
+.lightbox.open { display: flex; }
+@keyframes lbIn { from { opacity: 0; } to { opacity: 1; } }
+.lightbox img {
+  max-width: 92vw; max-height: 88vh; border-radius: 12px;
+  box-shadow: 0 24px 70px rgba(0,0,0,.65); object-fit: contain;
+}
+.lightbox .lb-close, .lightbox .lb-nav {
+  position: absolute; appearance: none; border: 0; cursor: pointer;
+  background: rgba(255,255,255,.1); color: #fff; backdrop-filter: blur(4px);
+  display: flex; align-items: center; justify-content: center;
+  transition: background .15s;
+}
+.lightbox .lb-close:hover, .lightbox .lb-nav:hover { background: rgba(255,255,255,.22); }
+.lightbox .lb-close {
+  top: 18px; right: 20px; width: 44px; height: 44px; border-radius: 50%;
+  font-size: 26px; line-height: 1;
+}
+.lightbox .lb-nav {
+  top: 50%; transform: translateY(-50%); width: 52px; height: 52px;
+  border-radius: 50%; font-size: 32px; line-height: 1;
+}
+.lightbox .lb-prev { left: 18px; }
+.lightbox .lb-next { right: 18px; }
+@media (max-width: 600px) {
+  .lightbox .lb-nav { width: 44px; height: 44px; font-size: 26px; }
+  .lightbox .lb-prev { left: 8px; }
+  .lightbox .lb-next { right: 8px; }
 }

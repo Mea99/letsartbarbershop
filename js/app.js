@@ -128,6 +128,39 @@
     if (row) row.classList.add('today');
   }
 
+  /* ---------- 7. Lightbox (klik w zdjęcie galerii → powiększenie) ---------- */
+  function setupLightbox() {
+    var imgs = Array.prototype.slice.call(document.querySelectorAll('.gallery-grid img'));
+    if (!imgs.length) return;
+    var box = document.createElement('div');
+    box.className = 'lightbox';
+    box.innerHTML =
+      '<button class="lb-close" aria-label="Zamknij">&times;</button>' +
+      '<button class="lb-nav lb-prev" aria-label="Poprzednie">&#8249;</button>' +
+      '<img alt="">' +
+      '<button class="lb-nav lb-next" aria-label="Następne">&#8250;</button>';
+    document.body.appendChild(box);
+    var lbImg = box.querySelector('img');
+    var idx = 0;
+    function show(i) { idx = (i + imgs.length) % imgs.length; lbImg.src = imgs[idx].currentSrc || imgs[idx].src; }
+    function open(i) { show(i); box.classList.add('open'); document.body.style.overflow = 'hidden'; }
+    function close() { box.classList.remove('open'); document.body.style.overflow = ''; }
+    imgs.forEach(function (im, i) {
+      im.style.cursor = 'zoom-in';
+      im.addEventListener('click', function () { open(i); });
+    });
+    box.querySelector('.lb-close').addEventListener('click', close);
+    box.querySelector('.lb-prev').addEventListener('click', function (e) { e.stopPropagation(); show(idx - 1); });
+    box.querySelector('.lb-next').addEventListener('click', function (e) { e.stopPropagation(); show(idx + 1); });
+    box.addEventListener('click', function (e) { if (e.target === box) close(); });
+    document.addEventListener('keydown', function (e) {
+      if (!box.classList.contains('open')) return;
+      if (e.key === 'Escape') close();
+      else if (e.key === 'ArrowLeft') show(idx - 1);
+      else if (e.key === 'ArrowRight') show(idx + 1);
+    });
+  }
+
   /* ---------- init ---------- */
   function init() {
     highlightToday();
@@ -136,6 +169,7 @@
     setupScroll();
     setupCounters();
     setupLang();
+    setupLightbox();
   }
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
