@@ -334,9 +334,9 @@ h2.title em { font-family: var(--font-script); font-style: normal; color: var(--
 .svc-name { font-size: 16px; font-weight: 700; color: var(--ink); }
 .svc-en { display: block; font-size: 12px; font-weight: 500; color: var(--muted); margin-top: 2px; }
 .svc-dots { flex: 1; border-bottom: 1px dotted var(--line-2); transform: translateY(-4px); }
-.svc-meta { display: flex; flex-direction: column; align-items: flex-end; text-align: right; flex-shrink: 0; }
-.svc-price { display: block; font-family: var(--font-display); font-size: 26px; line-height: 1; color: var(--orange-bright); }
-.svc-time { display: block; font-size: 11px; color: var(--muted); margin-top: 4px; }
+.svc-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 7px; text-align: right; flex-shrink: 0; }
+.svc-price { display: block; font-family: var(--font-display); font-size: 26px; line-height: 1; white-space: nowrap; color: var(--orange-bright); }
+.svc-time { display: block; font-size: 11px; line-height: 1; white-space: nowrap; color: var(--muted); }
 
 /* ---------------------------------------------------------------
    Gallery
