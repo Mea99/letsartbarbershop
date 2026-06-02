@@ -171,6 +171,56 @@
     }, { passive: true });
   }
 
+  /* ---------- 8. Status otwarcia (dynamiczny, aktualizowany co minutę) ---------- */
+  function setupOpenStatus() {
+    var badge = document.getElementById('openBadge');
+    if (!badge) return;
+    var textEl = badge.querySelector('.open-text');
+    // Godziny: 0=niedziela ... 6=sobota; null = zamknięte.
+    var schedule = {
+      0: null,
+      1: { o: '10:00', c: '18:00' }, 2: { o: '10:00', c: '18:00' },
+      3: { o: '10:00', c: '18:00' }, 4: { o: '10:00', c: '18:00' },
+      5: { o: '10:00', c: '18:00' }, 6: { o: '09:00', c: '15:00' }
+    };
+    var dPL = ['niedz.', 'pon.', 'wt.', 'śr.', 'czw.', 'pt.', 'sob.'];
+    var dEN = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    function toMin(s) { var p = s.split(':'); return (+p[0]) * 60 + (+p[1]); }
+
+    function compute() {
+      var now = new Date();
+      var day = now.getDay();
+      var mins = now.getHours() * 60 + now.getMinutes();
+      var today = schedule[day];
+      var pl, en, open = false;
+      if (today && mins >= toMin(today.o) && mins < toMin(today.c)) {
+        open = true;
+        pl = 'Otwarte teraz · do ' + today.c;
+        en = 'Open now · until ' + today.c;
+      } else {
+        var addDays = 0, nd = day, nextO = null;
+        if (today && mins < toMin(today.o)) { nextO = today.o; addDays = 0; }
+        else {
+          for (var i = 1; i <= 7; i++) {
+            var d = (day + i) % 7;
+            if (schedule[d]) { nextO = schedule[d].o; addDays = i; nd = d; break; }
+          }
+        }
+        var wPL = addDays === 0 ? 'dziś' : (addDays === 1 ? 'jutro' : dPL[nd]);
+        var wEN = addDays === 0 ? 'today' : (addDays === 1 ? 'tomorrow' : dEN[nd]);
+        pl = 'Zamknięte · otwieramy ' + wPL + ' ' + nextO;
+        en = 'Closed · opens ' + wEN + ' ' + nextO;
+      }
+      textEl.setAttribute('data-pl', pl);
+      textEl.setAttribute('data-en', en);
+      var lang = document.documentElement.lang === 'en' ? 'en' : 'pl';
+      textEl.textContent = lang === 'en' ? en : pl;
+      badge.classList.toggle('closed', !open);
+    }
+    compute();
+    setInterval(compute, 60000);
+  }
+
   /* ---------- init ---------- */
   function init() {
     highlightToday();
@@ -179,6 +229,7 @@
     setupScroll();
     setupCounters();
     setupLang();
+    setupOpenStatus();
     setupLightbox();
   }
   if (document.readyState === 'loading') {
