@@ -159,6 +159,16 @@
       else if (e.key === 'ArrowLeft') show(idx - 1);
       else if (e.key === 'ArrowRight') show(idx + 1);
     });
+    /* Swipe na telefonie: w lewo = następne, w prawo = poprzednie, w dół = zamknij. */
+    var tsx = 0, tsy = 0;
+    box.addEventListener('touchstart', function (e) {
+      var t = e.changedTouches[0]; tsx = t.clientX; tsy = t.clientY;
+    }, { passive: true });
+    box.addEventListener('touchend', function (e) {
+      var t = e.changedTouches[0], dx = t.clientX - tsx, dy = t.clientY - tsy;
+      if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)) show(idx + (dx < 0 ? 1 : -1));
+      else if (dy > 70 && Math.abs(dy) > Math.abs(dx)) close();
+    }, { passive: true });
   }
 
   /* ---------- init ---------- */
